@@ -1,8 +1,8 @@
 # Aula-5-Vetorizacao
 Como dever de casa você deve ter estudado a aula da profa Mary Hall [aqui](./http://www.cs.utah.edu/~mhall/cs4230f12/CS4230-L19.mov)
-e os slides [aqui](./http://www.cs.utah.edu/~mhall/cs4230f12/CS4230-L19.pdf)
+e os slides [aqui](/http://www.cs.utah.edu/~mhall/cs4230f12/CS4230-L19.pdf)
 
-Hoje vamos seguir o roteiro do [PRACE Summer of HPC 2017](./https://events.prace-ri.eu/event/590/session/14/#20170705) para exercitar esse conteúdo.
+Hoje vamos seguir o roteiro do [PRACE Summer of HPC 2017](/https://events.prace-ri.eu/event/590/session/14/#20170705) para exercitar esse conteúdo.
 
 1. Verifique que o icc/icpc está instalado: 
 ```bash
