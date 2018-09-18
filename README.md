@@ -8,20 +8,24 @@ Hoje vamos seguir o roteiro do [PRACE Summer of HPC 2017](https://events.prace-r
 ```bash
 $icpc -v
 ```
-2. Compile os exemplos com: 
+2. Compile o exemplo t1.c com: 
 ```bash
 $icpc -O3 -msse3 -qopt-report=5 arq.c 
 ```
 ```bash
 $icpc -O3 -xcore-avx2 -qopt-report=5 arq.c 
 ```
+Verifique o relatório no arquivo.optrpt. O que aconteceu e por que?
+
+Para compilar no gcc use:
 ```bash
 $gcc -O2 -ftree-vectorize -mavx2 -fopt-info-all arq.c
 ```
 3. Extraia os arquivos do lab Vectorization_Hands_on.tar.bz2 a um subdiretório no seu home folder.
 ## Actividade 1 - Vectorização com o Intel C++ Compiler ##
+Faça os exercícios no arquivo [Hands_on](./Vectorization_Hands_on.pdf)
 
-Atividade 3:
+## Atividade 3 ## 
 1. Verifique que o Intel Advisor está disponível:
 ```bash
 $advixe -cl --version
