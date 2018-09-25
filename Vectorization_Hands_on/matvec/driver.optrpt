@@ -1,0 +1,470 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C Intel(R) 64 Compiler for applications running on Intel(R) 64, Version 19.0.0.117 Build 20180804
+
+Compiler options: -O2 -xavx -o matvector -qopt-report=5
+
+    Report from: Interprocedural optimizations [ipo]
+
+  WHOLE PROGRAM (SAFE) [EITHER METHOD]: false
+  WHOLE PROGRAM (SEEN) [TABLE METHOD]: false
+  WHOLE PROGRAM (READ) [OBJECT READER METHOD]: false
+
+INLINING OPTION VALUES:
+  -inline-factor: 100
+  -inline-min-size: 30
+  -inline-max-size: 230
+  -inline-max-total-size: 2000
+  -inline-max-per-routine: 10000
+  -inline-max-per-compile: 500000
+
+In the inlining report below:
+   "sz" refers to the "size" of the routine. The smaller a routine's size,
+      the more likely it is to be inlined.
+   "isz" refers to the "inlined size" of the routine. This is the amount
+      the calling routine will grow if the called routine is inlined into it.
+      The compiler generally limits the amount a routine can grow by having
+      routines inlined into it.
+
+Begin optimization report for: main(int, char **)
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (main(int, char **)) [1/6=16.7%] driver.c(103,1)
+  -> EXTERN: (108,18) ?1memset
+  -> EXTERN: (111,5) printf(const char *__restrict__, ...)
+  -> INLINE: (114,5) init_matrix(int, int, double, double (*)[63]) (isz = 65) (sz = 76)
+    -> EXTERN: (63,23) fmod(double, double)
+  -> INLINE: (115,5) init_vector(int, double, double *) (isz = 37) (sz = 46)
+    -> EXTERN: (79,16) fmod(double, double)
+  -> INLINE: (118,5) start_timer() (isz = 4) (sz = 7)
+    -> EXTERN: (38,5) gettimeofday(struct timeval *__restrict__, __timezone_ptr_t)
+  -> EXTERN: (120,9) matvec(unsigned int, unsigned int, double (*)[*], double *, double *)
+  -> INLINE: (122,16) stop_timer() (isz = 13) (sz = 18)
+    -> EXTERN: (47,5) gettimeofday(struct timeval *__restrict__, __timezone_ptr_t)
+  -> EXTERN: (125,5) printf(const char *__restrict__, ...)
+  -> EXTERN: (126,5) printf(const char *__restrict__, ...)
+  -> INLINE: (129,5) printsum(int, double *) (isz = 21) (sz = 28)
+    -> EXTERN: (94,5) printf(const char *__restrict__, ...)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at driver.c(61,5) inlined into driver.c(114,5)
+   remark #15542: loop was not vectorized: inner loop was already vectorized
+
+   LOOP BEGIN at driver.c(62,9) inlined into driver.c(114,5)
+   <Peeled loop for vectorization>
+      remark #25015: Estimate of max trip count of loop=3
+   LOOP END
+
+   LOOP BEGIN at driver.c(62,9) inlined into driver.c(114,5)
+      remark #15388: vectorization support: reference a[i][j] has aligned access   [ driver.c(63,13) ]
+      remark #15305: vectorization support: vector length 4
+      remark #15309: vectorization support: normalized vectorization overhead 0.169
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15449: unmasked aligned unit stride stores: 1 
+      remark #15475: --- begin vector cost summary ---
+      remark #15476: scalar cost: 113 
+      remark #15477: vector cost: 20.750 
+      remark #15478: estimated potential speedup: 4.450 
+      remark #15482: vectorized math library calls: 1 
+      remark #15487: type converts: 1 
+      remark #15488: --- end vector cost summary ---
+      remark #25015: Estimate of max trip count of loop=15
+   LOOP END
+
+   LOOP BEGIN at driver.c(62,9) inlined into driver.c(114,5)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at driver.c(78,5) inlined into driver.c(115,5)
+   remark #15388: vectorization support: reference x[i] has aligned access   [ driver.c(115,27) ]
+   remark #15305: vectorization support: vector length 4
+   remark #15309: vectorization support: normalized vectorization overhead 0.012
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15449: unmasked aligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 112 
+   remark #15477: vector cost: 20.250 
+   remark #15478: estimated potential speedup: 4.540 
+   remark #15482: vectorized math library calls: 1 
+   remark #15487: type converts: 1 
+   remark #15488: --- end vector cost summary ---
+   remark #25015: Estimate of max trip count of loop=15
+LOOP END
+
+LOOP BEGIN at driver.c(78,5) inlined into driver.c(115,5)
+<Remainder loop for vectorization>
+   remark #25436: completely unrolled by 3  
+LOOP END
+
+LOOP BEGIN at driver.c(92,5) inlined into driver.c(129,5)
+   remark #15388: vectorization support: reference b[i] has aligned access   [ driver.c(129,19) ]
+   remark #15305: vectorization support: vector length 4
+   remark #15399: vectorization support: unroll factor set to 8
+   remark #15309: vectorization support: normalized vectorization overhead 0.775
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15448: unmasked aligned unit stride loads: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 6 
+   remark #15477: vector cost: 1.250 
+   remark #15478: estimated potential speedup: 3.450 
+   remark #15488: --- end vector cost summary ---
+   remark #25015: Estimate of max trip count of loop=2
+LOOP END
+
+
+Non-optimizable loops:
+
+
+LOOP BEGIN at driver.c(119,5)
+   remark #15543: loop was not vectorized: loop with function call not considered an optimization candidate.
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(108,18):remark #34000: call to memset implemented inline with stores with proven (alignment, offset): (32, 0)
+driver.c(103,1):remark #34051: REGISTER ALLOCATION : [main] driver.c:103
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   24[ rax rdx rcx rsi rdi r8 r12-r15 zmm0-zmm13]
+        
+    Routine temporaries
+        Total         :     184
+            Global    :      51
+            Local     :     133
+        Regenerable   :      54
+        Spilled       :       5
+        
+    Routine stack
+        Variables     :   33276 bytes*
+            Reads     :      10 [4.17e+01 ~ 0.0%]
+            Writes    :      10 [4.40e+01 ~ 0.0%]
+        Spills        :      32 bytes*
+            Reads     :       4 [3.69e+00 ~ 0.0%]
+            Writes    :       4 [2.19e+00 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: start_timer()
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (start_timer()) [2/6=33.3%] driver.c(36,1)
+  -> EXTERN: (38,5) gettimeofday(struct timeval *__restrict__, __timezone_ptr_t)
+
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(36,1):remark #34051: REGISTER ALLOCATION : [start_timer] driver.c:36
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :    2[ rsi rdi]
+        
+    Routine temporaries
+        Total         :       9
+            Global    :       0
+            Local     :       9
+        Regenerable   :       3
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: printsum(int, double *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (printsum(int, double *)) [3/6=50.0%] driver.c(88,40)
+  -> EXTERN: (94,5) printf(const char *__restrict__, ...)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at driver.c(92,5)
+<Peeled loop for vectorization>
+   remark #25015: Estimate of max trip count of loop=3
+LOOP END
+
+LOOP BEGIN at driver.c(92,5)
+   remark #15388: vectorization support: reference vec[i] has aligned access   [ driver.c(92,37) ]
+   remark #15305: vectorization support: vector length 4
+   remark #15399: vectorization support: unroll factor set to 4
+   remark #15309: vectorization support: normalized vectorization overhead 2.050
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15442: entire loop may be executed in remainder
+   remark #15448: unmasked aligned unit stride loads: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 6 
+   remark #15477: vector cost: 1.250 
+   remark #15478: estimated potential speedup: 3.800 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at driver.c(92,5)
+<Remainder loop for vectorization>
+   remark #15388: vectorization support: reference vec[i] has aligned access   [ driver.c(92,37) ]
+   remark #15305: vectorization support: vector length 4
+   remark #15309: vectorization support: normalized vectorization overhead 8.200
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+   remark #15442: entire loop may be executed in remainder
+   remark #15448: unmasked aligned unit stride loads: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 6 
+   remark #15477: vector cost: 1.250 
+   remark #15478: estimated potential speedup: 3.800 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at driver.c(92,5)
+<Remainder loop for vectorization>
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(88,40):remark #34051: REGISTER ALLOCATION : [printsum] driver.c:88
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   13[ rax rdx rcx rsi rdi r8 zmm0-zmm6]
+        
+    Routine temporaries
+        Total         :      58
+            Global    :      26
+            Local     :      32
+        Regenerable   :       5
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: init_vector(int, double, double *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (init_vector(int, double, double *)) [4/6=66.7%] driver.c(75,1)
+  -> EXTERN: (79,16) fmod(double, double)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at driver.c(78,5)
+<Peeled loop for vectorization>
+   remark #25015: Estimate of max trip count of loop=3
+LOOP END
+
+LOOP BEGIN at driver.c(78,5)
+   remark #15388: vectorization support: reference a[i] has aligned access   [ driver.c(79,9) ]
+   remark #15305: vectorization support: vector length 4
+   remark #15309: vectorization support: normalized vectorization overhead 0.173
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15442: entire loop may be executed in remainder
+   remark #15449: unmasked aligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 112 
+   remark #15477: vector cost: 20.250 
+   remark #15478: estimated potential speedup: 5.200 
+   remark #15482: vectorized math library calls: 1 
+   remark #15487: type converts: 1 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at driver.c(78,5)
+<Remainder loop for vectorization>
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(75,1):remark #34051: REGISTER ALLOCATION : [init_vector] driver.c:75
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   23[ rax rdx rcx rsi rdi r8-r9 r12-r15 zmm0-zmm6 zmm8-zmm12]
+        
+    Routine temporaries
+        Total         :      77
+            Global    :      24
+            Local     :      53
+        Regenerable   :       6
+        Spilled       :       4
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :      16 bytes*
+            Reads     :       2 [1.80e+00 ~ 0.6%]
+            Writes    :       2 [1.80e+00 ~ 0.6%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: init_matrix(int, int, double, double (*)[63])
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (init_matrix(int, int, double, double (*)[63])) [5/6=83.3%] driver.c(58,1)
+  -> EXTERN: (63,23) fmod(double, double)
+
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at driver.c(61,5)
+   remark #15542: loop was not vectorized: inner loop was already vectorized
+
+   LOOP BEGIN at driver.c(62,9)
+   <Peeled loop for vectorization>
+      remark #25015: Estimate of max trip count of loop=3
+   LOOP END
+
+   LOOP BEGIN at driver.c(62,9)
+      remark #15388: vectorization support: reference a[i][j] has aligned access   [ driver.c(63,13) ]
+      remark #15305: vectorization support: vector length 4
+      remark #15309: vectorization support: normalized vectorization overhead 0.205
+      remark #15300: LOOP WAS VECTORIZED
+      remark #15442: entire loop may be executed in remainder
+      remark #15449: unmasked aligned unit stride stores: 1 
+      remark #15475: --- begin vector cost summary ---
+      remark #15476: scalar cost: 113 
+      remark #15477: vector cost: 20.750 
+      remark #15478: estimated potential speedup: 4.440 
+      remark #15482: vectorized math library calls: 1 
+      remark #15487: type converts: 1 
+      remark #15488: --- end vector cost summary ---
+      remark #25015: Estimate of max trip count of loop=15
+   LOOP END
+
+   LOOP BEGIN at driver.c(62,9)
+   <Remainder loop for vectorization>
+      remark #25015: Estimate of max trip count of loop=63
+   LOOP END
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(58,1):remark #34051: REGISTER ALLOCATION : [init_matrix] driver.c:58
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   26[ rax rdx rcx rbx rsi rdi r8-r10 r12-r15 zmm0-zmm6 zmm8-zmm13]
+        
+    Routine temporaries
+        Total         :      89
+            Global    :      33
+            Local     :      56
+        Regenerable   :       7
+        Spilled       :       9
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :      72 bytes*
+            Reads     :      11 [3.15e+01 ~ 2.1%]
+            Writes    :      11 [3.15e+01 ~ 2.1%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: stop_timer()
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINE REPORT: (stop_timer()) [6/6=100.0%] driver.c(45,1)
+  -> EXTERN: (47,5) gettimeofday(struct timeval *__restrict__, __timezone_ptr_t)
+
+
+    Report from: Code generation optimizations [cg]
+
+driver.c(45,1):remark #34051: REGISTER ALLOCATION : [stop_timer] driver.c:45
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :    6[ rbx rbp r12-r15]
+        Assigned     :   11[ rsi rdi zmm0-zmm8]
+        
+    Routine temporaries
+        Total         :      20
+            Global    :       6
+            Local     :      14
+        Regenerable   :       4
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+00 ~ 0.0%]
+            Writes    :       0 [0.00e+00 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
