@@ -26,6 +26,7 @@ void matvec(unsigned int rows, unsigned int cols,
     enum { inc_i = 1, inc_j = 1 };
 
     for (i = 0; i < rows; i += inc_i) {
+    	#pragma ivdep
         for (j = 0; j < cols; j += inc_j) {
             b[i] += a[i][j] * x[j];
         }
